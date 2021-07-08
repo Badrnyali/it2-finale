@@ -19,7 +19,6 @@
     <div class="languages">
       <img src="..\image\British.png" alt="">
       <img style="margin-bottom: 4px;" src="..\image\germany.png" alt="">
-	  <img style="margin-bottom: 4px;" src="..\image\Vietnam.png" alt="">
     </div>
   </div>
 
@@ -56,17 +55,29 @@
     <div class="popup-box">
       <img src="..\image\error.png" alt="">
       <div style="display: flex; align-items: center; flex-direction: column; margin-top: 20px; position: relative;">
-        <p>Die Schadensgrenze wurde überschritten.<br> Klicken Sie auf 'Zur Fehlerbehandlung', um das Problem zu beheben.</p>
-        <a href="..\fehlerHandlung\fehler.html">
+        <p>Achtung! <br> Es scheint ein Defekt vorzuliegen.<br> Klicken Sie auf 'Zur Fehlerbehandlung', um das Problem zu beheben.<br> (Fehlermeldung: 42)</p>
+        <a href="..\fehlerHandlung\Kugellagerlauf.html">
           <div class="popup-fehler-box">
             Zur Fehlerbehandlung
           </div>
         </a>
-
       </div>
-
     </div>
-
+  </div>
+  <!-- Popup für loses Teil -->
+  <div class="popup-loses inactive-loses">
+    <div class="popup-box">
+      <img src="..\image\error.png" alt="">
+      <div style="display: flex; align-items: center; flex-direction: column; margin-top: 20px; position: relative;">
+        <p>Achtung! Indiz für loses Teil! <br> Überprüfen Sie die Vibration.
+          Falls die Fehlermeldung 666 ebenfalls auftritt. Klicken Sie auf 'Zur Fehlerbehandlung', um das Problem zu beheben<br>(Fehlermeldung: 666)</p>
+        <a href="..\fehlerHandlung\Anlageninnenleben.html">
+          <div class="popup-fehler-box">
+            Zur Fehlerbehandlung
+          </div>
+        </a>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -178,8 +189,17 @@
                     closeButton.onclick = function() {
                       popup_tol.classList.add("inactive");
                     }
+
+                    // Popu for loses Teil
+                    let closeButtonLosesTeil = document.querySelector(".popup-loses img");
+                    
+                    let popup_losesTeil = document.querySelector(".popup-loses");
+                    closeButtonLosesTeil.onclick = function() {
+                      popup_losesTeil.classList.add("inactive-loses");
+                    }
                     // singletonVar will we used, to check the damage line. See the for-loop
                     let singletonVar = 0;
+                    let singletonVar_popup2 = 0;
 
                     // For loop to seperate each element in an array. The time between 2 elements is 2 seconds
                     for (let i = 0; i < data.length; i++) {
@@ -211,6 +231,21 @@
                                   popup_tol.classList.remove("inactive");
                                 }
                             }
+                            // checks if there is an unmounted piece -> Indicator: if there is 
+                              // a differnece between 6 db at a 5 sec run time
+                              if(i % 5 == 0 && i > 10 && singletonVar_popup2 == 0){
+                                let dif = Laut[i-5] - Laut[i];
+                                let dif2 = Laut[i-10] - Laut[i-5];
+                                // if((dif < -0.02 || dif > 0.02) ){
+                                // the typical character in case 4 is that the chart goes up and down goes up and down
+                                // in the following line should check these ups and downs in a 5 sec run time
+                                if((dif < -6 && dif2 > 6) || (dif > 6 && dif2 < -6)){
+                                  // 2. POP-UP
+                                  popup_losesTeil.classList.remove("inactive-loses");
+                                  singletonVar_popup2++;
+                                }
+                              }
+                            
                         }, i * 50); // standard = 2000; take 100 for fast presentation
                     }
                 }
