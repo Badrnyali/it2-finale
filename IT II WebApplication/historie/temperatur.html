@@ -14,7 +14,7 @@
   <div id="top">
     <div class="logo">
       <a href="..\Condition\condition.html"> <img src="..\image\arrow.png" alt="pfeil" style="width:50px;height:30px;vertical-align :middle; "></a>
-      <p>Home / Historie / Temperature</p>
+      <p>Home / Condition Monitoring / Temperatur</p>
     </div>
     <div class="languages">
       <img src="..\image\British.png" alt="">
@@ -61,28 +61,8 @@
     <div class="popup-box">
       <img src="..\image\error.png" alt="">
       <div style="display: flex; align-items: center; flex-direction: column; margin-top: 20px; position: relative;">
-        <p>
-          Ein Fehler ist beim Temperatur aufgetreten!
-        </p>
-        <a href="..\fehlerHandlung\fehler.html">
-          <div class="popup-fehler-box">
-            Zum Fehlerbehandlung
-          </div>
-        </a>
-
-      </div>
-
-    </div>
-
-  </div>
-    <!-- Popup für loses Teil -->
-<div class="popup-loses inactive-loses">
-    <div class="popup-box">
-      <img src="..\image\error.png" alt="">
-      <div style="display: flex; align-items: center; flex-direction: column; margin-top: 20px; position: relative;">
-        <p>Achtung! Indiz für loses Teil! Fehlermeldung 666<br> Überprüfen Sie die Akustik.
-          Falls die Fehlermeldung 666 ebenfalls auftritt. Klicken Sie auf 'Zur Fehlerbehandlung', um das Problem zu beheben.</p>
-        <a href="..\fehlerHandlung\Anlageninnenleben.html">
+        <p>Achtung! <br> Es ist ein Problem mit dem Schmiermittelverbrauch aufgetreten. <br> Klicken Sie auf 'Zur Fehlerbehandlung', um das Problem zu beheben.</p>
+        <a href="..\fehlerHandlung\Schmiermittelverbrauch.html">
           <div class="popup-fehler-box">
             Zur Fehlerbehandlung
           </div>
@@ -174,7 +154,7 @@
     var getData = function() {
       $.ajax({
         // Get Data from URL and save in variable data
-        url: 'http://it2wi1.if-lab.de/rest/mpr_fall4',
+        url: 'http://it2wi1.if-lab.de/rest/mpr_fall1',
         success: function(data) {
           // Get the Temperatur array
           var Temperatur = data.map(function(e) {
@@ -190,7 +170,8 @@
           });
 
           // Replace dot with comma
-          let Temp = Temperatur.map(dots => dots.toString().replace(',', '.'))
+          let Temp = Temperatur.map(dots => dots.toString().replace(',', '.'));
+
           // Popup closing
           let closeButton = document.querySelector(".popup-box img");
 
@@ -198,15 +179,10 @@
           closeButton.onclick = function() {
             popup_tol.classList.add("inactive");
           }
-          // Popu for loses Teil
-          let closeButtonLosesTeil = document.querySelector(".popup-loses img");
 
-          let popup_losesTeil = document.querySelector(".popup-loses");
-          closeButtonLosesTeil.onclick = function() {
-            popup_losesTeil.classList.add("inactive-loses");
-          }
           // singletonVar will we used, to check the damage line. See the for-loop
           let singletonVar = 0;
+
           // For loop to seperate each element in an array. The time between 2 elements is 2 seconds
           for (let i = 0; i < data.length; i++) {
             setTimeout(() => {
@@ -228,25 +204,24 @@
               if ((Temp[i] >= 75) && (Temp[i] < 150)) {
                 myChart.data.datasets[0].backgroundColor = chartColorsBackground.color2;
                 myChart.data.datasets[0].borderColor = chartColorsBorder.color22;
-
-              }
-              if (Temp[i] >= 150) {
-                myChart.data.datasets[0].backgroundColor = chartColorsBackground.color3;
-                myChart.data.datasets[0].borderColor = chartColorsBorder.color33;
+                // if the values of temperature across the damage line, it will appears a popup-window
                 if(singletonVar == 0){
                   singletonVar++;
                   popup_tol.classList.remove("inactive");
                 }
               }
-            }, i * 100); // standard = 2000; take 100 for fast presentation
-
+              if (Temp[i] >= 150) {
+                myChart.data.datasets[0].backgroundColor = chartColorsBackground.color3;
+                myChart.data.datasets[0].borderColor = chartColorsBorder.color33;
+              }
+            }, i * 20); // standard = 2000; take 100 for fast presentation
           }
+          
 
         }
 
       });
     };
-
 
   </script>
 
