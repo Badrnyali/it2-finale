@@ -174,7 +174,7 @@
     var getData = function() {
       $.ajax({
         // Get Data from URL and save in variable data
-        url: 'http://it2wi1.if-lab.de/rest/mpr_fall3',
+        url: 'http://it2wi1.if-lab.de/rest/mpr_fall4',
         success: function(data) {
           // Get the Temperatur array
           var Temperatur = data.map(function(e) {
@@ -191,6 +191,22 @@
 
           // Replace dot with comma
           let Temp = Temperatur.map(dots => dots.toString().replace(',', '.'))
+          // Popup closing
+          let closeButton = document.querySelector(".popup-box img");
+
+          let popup_tol = document.querySelector(".popup");
+          closeButton.onclick = function() {
+            popup_tol.classList.add("inactive");
+          }
+          // Popu for loses Teil
+          let closeButtonLosesTeil = document.querySelector(".popup-loses img");
+
+          let popup_losesTeil = document.querySelector(".popup-loses");
+          closeButtonLosesTeil.onclick = function() {
+            popup_losesTeil.classList.add("inactive-loses");
+          }
+          // singletonVar will we used, to check the damage line. See the for-loop
+          let singletonVar = 0;
           // For loop to seperate each element in an array. The time between 2 elements is 2 seconds
           for (let i = 0; i < data.length; i++) {
             setTimeout(() => {
@@ -217,7 +233,10 @@
               if (Temp[i] >= 150) {
                 myChart.data.datasets[0].backgroundColor = chartColorsBackground.color3;
                 myChart.data.datasets[0].borderColor = chartColorsBorder.color33;
-
+                if(singletonVar == 0){
+                  singletonVar++;
+                  popup_tol.classList.remove("inactive");
+                }
               }
             }, i * 100); // standard = 2000; take 100 for fast presentation
 
@@ -229,13 +248,6 @@
     };
 
 
-    // Popup closing
-    let closeButton = document.querySelector(".popup-box img");
-    let popup = document.querySelector(".popup");
-    closeButton.onclick = function() {
-      popup.classList.add("inactive");
-      console.log("clicked");
-    }
   </script>
 
 
