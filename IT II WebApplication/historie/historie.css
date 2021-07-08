@@ -114,3 +114,19 @@ display: none !important;
   text-decoration: none;
   list-style: none;
 }
+/* Popup Box für loses teil */
+.popup-loses{ /* this is changed; I added '-vibr' */
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  }
+  .popup-loses.inactive-loses{ /* this is changed; I added '-vibr' */
+  display: none !important;
+  }
